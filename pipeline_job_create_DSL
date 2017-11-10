@@ -1,0 +1,23 @@
+//Pipeline job creation
+pipelineJob('Rolling_pipeline_Deploy') {
+
+disabled()
+
+  def repo = 'https://github.com/kamalkishorsingh/Jenkins.git'
+
+  
+  description("Pipeline for $repo")
+
+  definition {
+    cpsScm {
+      scm {
+        git {
+          remote { url(repo) }
+          branches('*/master')
+          scriptPath('Pipeline-Job')
+          extensions { }
+        }
+      }
+    }
+  }
+}
