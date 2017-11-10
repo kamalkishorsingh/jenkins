@@ -1,0 +1,51 @@
+node {
+stage ('Disable_Autoscaling_Policy') {
+    build job: 'Disable_Autoscaling_Policy'
+}
+
+stage ('Pullout_AzB_Instances') {
+    build job: 'Pullout_AzB_Instance'
+}
+
+stage ('Deploy_AzB') {
+    build job: 'Deploy_AzB'
+}
+
+stage ('Test_AzB_Environment') {
+    build job: 'Test_AzB_Environment'
+}
+
+parameters {
+        string(defaultValue: Approve, description: '', name: 'Action')
+    }
+
+stage ("REQUESTED_ACTIONS") {
+    
+    script {
+        env.RELEASE_SCOPE = input message: 'do you want to deploy to Deploy_AzA?', ok: 'Release',
+        parameters: [string(defaultValue: 'Approve', description: '', name: 'Action')]
+    }  
+    echo "${env.RELEASE_SCOPE}"
+}
+    
+
+stage ('Approve_and_Reject') {
+    build job: 'Approve_and_Reject', parameters: [[$class: 'StringParameterValue', name: 'REQUESTED_ACTIONS', value: "${env.RELEASE_SCOPE}"]]
+}
+
+stage ("ACTIONS") {
+    
+    script {
+        env.READ_SCOPE = input message: 'Do you want to Finalize Deployement?', ok: 'Release',
+        parameters: [string(defaultValue: 'Approve', description: '', name: 'Action')]
+    }  
+    echo "${env.READ_SCOPE}"
+}
+
+stage ('Approve_and_Reject') {
+    build job: 'Approve_and_Reject', parameters: [[$class: 'StringParameterValue', name: 'ACTIONS', value: "${env.READ_SCOPE}"]]
+}  
+    stage ('Enable_Autoscaling') {
+        build job: 'Enable_Autoscaling'
+    }
+}
