@@ -30,7 +30,7 @@ stage ("REQUESTED_ACTIONS") {
     
 
 stage ('Approve_and_Reject') {
-    build job: 'Approve_and_Reject', parameters: [[$class: 'StringParameterValue', name: 'REQUESTED_ACTIONS', value: "${env.RELEASE_SCOPE}"]]
+    build job: 'Rolling_Accept_reject', parameters: [[$class: 'StringParameterValue', name: 'REQUESTED_ACTIONS', value: "${env.RELEASE_SCOPE}"]]
 }
 
 stage ("ACTIONS") {
@@ -43,7 +43,7 @@ stage ("ACTIONS") {
 }
 
 stage ('Rolling_Accept_reject') {
-    build job: 'Approve_and_Reject', parameters: [[$class: 'StringParameterValue', name: 'ACTIONS', value: "${env.READ_SCOPE}"]]
+    build job: 'Rolling_Accept_reject', parameters: [[$class: 'StringParameterValue', name: 'ACTIONS', value: "${env.READ_SCOPE}"]]
 }  
     stage ('Enable_Autoscaling') {
         build job: 'Enable_Autoscaling'
