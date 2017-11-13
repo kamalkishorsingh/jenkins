@@ -353,7 +353,7 @@ job('Run_Artifact_Job') {
 
 listView('Rolling') {
                 jobs {
-                      names("Disable_Autoscaling","Pullout_AzB_Instances","Deploy_AzB","Test_AzB_Environment","Rollback_AzB_Instances","Join_AzB_Instances","Pullout_AzA_Instances","Deploy_AzA","Test_AzA_Environment","Manual_Rollback","Join_AzA_Environment","Test_Whole_Environment","Run_Artifact_Job","Enable_Autoscaling","Disable_Autoscaling","Pullout_AzB_Instances","Deploy_AzB","Test_AzB_Environment","Rollback_AzB_Instances","Join_AzB_Instances","Pullout_AzA_Instances","Deploy_AzA","Test_AzA_Environment","Manual_Rollback","Join_AzA_Environment","Test_Whole_Environment","Run_Artifact_Job")
+                      names("Disable_Autoscaling","Pullout_AzB_Instances","Deploy_AzB","Test_AzB_Environment","Rollback_AzB_Instances","Join_AzB_Instances","Pullout_AzA_Instances","Deploy_AzA","Test_AzA_Environment","Manual_Rollback","Join_AzA_Environment","Test_Whole_Environment","Run_Artifact_Job","Enable_Autoscaling","Disable_Autoscaling","Pullout_AzB_Instances","Deploy_AzB","Test_AzB_Environment","Rollback_AzB_Instances","Join_AzB_Instances","Pullout_AzA_Instances","Deploy_AzA","Test_AzA_Environment","Manual_Rollback","Join_AzA_Environment","Test_Whole_Environment","Run_Artifact_Job","Pipeline1","Rolling_Accept_reject")
                 }
                 columns {
                status()
