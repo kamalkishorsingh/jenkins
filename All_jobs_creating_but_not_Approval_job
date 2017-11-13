@@ -1,0 +1,366 @@
+job('Disable_Autoscaling') {
+  description('Job for Disable Autoscaling')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Disabling Autoscaling ')
+            }
+}
+
+job('Pullout_AzB_Instances') {
+  description('Pullout AzB Instances from ELB')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Pullout AzB Instances ')
+            }
+}
+
+job('Deploy_AzB') {
+  description('Deploy_AzB on Instances')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Deploying AzB ')
+            }
+}
+
+job('Test_AzB_Environment') {
+  description('Connecting with testing ELB')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Testing AzB Environment ')
+            }
+}
+
+job('Rollback_AzB_Instances') {
+  description('Rollback AzB on Instances')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Rollback AzB Instance ')
+            }
+}
+
+job('Join_AzB_Instances') {
+  description('Remove from testing ELB Join AzB Instance with ELB')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Removing testing ELB ')
+            }
+}
+
+job('Pullout_AzA_Instances') {
+  description('Pullout AzA Instances from ELB')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Pulling Out AzA ')
+            }
+}
+
+job('Deploy_AzA') {
+  description('Job for Deploying AzA Environment')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Deploying AzA ')
+            }
+}
+
+job('Test_AzA_Environment') {
+  description('Connecting with testing ELB and Test AzA Environment')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Testing AzA Environment ')
+            }
+}
+
+job('Manual_Rollback') {
+  description('Manual Rollback Environment AzA/AzB')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Manual Rollback ')
+            }
+}
+
+job('Join_AzA_Environment') {
+  description('Remove from testing ELB and Join AzA Environment')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Joining AzA Environment ')
+            }
+}
+
+job('Test_Whole_Environment') {
+  description('Testing for whole Environment')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Testing Whole Environment ')
+            }
+}
+
+job('Run_Artifact_Job') {
+  description('Run artifact job')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Running Artifact Job ')
+            }
+}
+
+job('Enable_Autoscaling') {
+  description('Enable autoscaling')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Enabling Autoscaling ')
+            }
+}
+
+job('Disable_Autoscaling') {
+  description('Job for Disable Autoscaling')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Disabling Autoscaling ')
+            }
+}
+
+job('Pullout_AzB_Instances') {
+  description('Pullout AzB Instances from ELB')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Pullout AzB Instances ')
+            }
+}
+
+job('Deploy_AzB') {
+  description('Deploy_AzB on Instances')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Deploying AzB ')
+            }
+}
+
+job('Test_AzB_Environment') {
+  description('Connecting with testing ELB')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Testing AzB Environment ')
+            }
+}
+
+job('Rollback_AzB_Instances') {
+  description('Rollback AzB on Instances')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Rollback AzB Instance ')
+            }
+}
+
+job('Join_AzB_Instances') {
+  description('Remove from testing ELB Join AzB Instance with ELB')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Removing testing ELB ')
+            }
+}
+
+job('Pullout_AzA_Instances') {
+  description('Pullout AzA Instances from ELB')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Pulling Out AzA ')
+            }
+}
+
+job('Deploy_AzA') {
+  description('Job for Deploying AzA Environment')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Deploying AzA ')
+            }
+}
+
+job('Test_AzA_Environment') {
+  description('Connecting with testing ELB and Test AzA Environment')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Testing AzA Environment ')
+            }
+}
+
+job('Manual_Rollback') {
+  description('Manual Rollback Environment AzA/AzB')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Manual Rollback ')
+            }
+}
+
+job('Join_AzA_Environment') {
+  description('Remove from testing ELB and Join AzA Environment')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Joining AzA Environment ')
+            }
+}
+
+job('Test_Whole_Environment') {
+  description('Testing for whole Environment')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Testing Whole Environment ')
+            }
+}
+
+job('Run_Artifact_Job') {
+  description('Run artifact job')
+  disabled()
+  logRotator {
+    	daysToKeep(60)
+    	numToKeep(20)
+    	artifactDaysToKeep(1)
+	}
+    steps {
+                shell(' echo Running Artifact Job ')
+            }
+}
+
+
+
+listView('Rolling') {
+                jobs {
+                      names("Disable_Autoscaling","Pullout_AzB_Instances","Deploy_AzB","Test_AzB_Environment","Rollback_AzB_Instances","Join_AzB_Instances","Pullout_AzA_Instances","Deploy_AzA","Test_AzA_Environment","Manual_Rollback","Join_AzA_Environment","Test_Whole_Environment","Run_Artifact_Job","Enable_Autoscaling","Disable_Autoscaling","Pullout_AzB_Instances","Deploy_AzB","Test_AzB_Environment","Rollback_AzB_Instances","Join_AzB_Instances","Pullout_AzA_Instances","Deploy_AzA","Test_AzA_Environment","Manual_Rollback","Join_AzA_Environment","Test_Whole_Environment","Run_Artifact_Job")
+                }
+                columns {
+               status()
+               weather()
+               name()
+               lastSuccess()
+               lastFailure()
+       }
+       
+            }
