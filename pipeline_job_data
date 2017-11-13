@@ -1,5 +1,5 @@
 node {
-stage ('Disable_Autoscaling_Policy') {
+stage ('Disable_Autoscaling') {
     build job: 'Disable_Autoscaling_Policy'
 }
 
