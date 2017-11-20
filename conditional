@@ -1,3 +1,4 @@
+//Deploy data to AZ
 node {
 parameters {
         string(defaultValue: b, description: '', name: 'AZ')
