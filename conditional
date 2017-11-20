@@ -1,0 +1,19 @@
+node {
+parameters {
+        string(defaultValue: b, description: '', name: 'AZ')
+    }
+
+stage ("DEPLOY_ACTIONS") {
+    
+    script {
+        env.RELEASE_SCOPE = input message: 'do you want to deploy to Deploy_Az?', ok: 'Release',
+        parameters: [string(defaultValue: 'b', description: '', name: 'AZ')]
+    }  
+    echo "${env.RELEASE_SCOPE}"
+}
+    
+
+stage ('Approve_and_Reject_Deployment_AZ') {
+    build job: 'Deploy', parameters: [[$class: 'StringParameterValue', name: 'AZ', value: "${env.RELEASE_SCOPE}"]]
+}
+}
