@@ -21,7 +21,7 @@ stage ("DEPLOY_ACTIONS") {
 }
     
 
-stage ('Approve_and_Reject_Deployment_AZ') {
+stage ('Deployment_FE_AZ') {
     build job: 'prod_FE_Deploy', parameters: [[$class: 'StringParameterValue', name: 'AZ', value: "${env.RELEASE_SCOPE}"]]
 }
 
@@ -40,7 +40,7 @@ stage ("DEPLOY_ACTIONS_BE_API") {
 }
     
 
-stage ('Approve_and_Reject_Deployment_BE_API_AZ') {
+stage ('Deployment_BE_API_AZ') {
     build job: 'prod_BE_API_Deploy', parameters: [[$class: 'StringParameterValue', name: 'AZ', value: "${env.RELEASE_SCOPE}"]]
 }
 
@@ -59,7 +59,7 @@ stage ("DEPLOY_ACTIONS_BE_Connectors") {
 }
     
 
-stage ('Approve_and_Reject_Deployment_BE_Connectors_AZ') {
+stage ('Deployment_BE_Connectors_AZ') {
     build job: 'prod_BE_connectors_Deploy', parameters: [[$class: 'StringParameterValue', name: 'AZ', value: "${env.RELEASE_SCOPE}"]]
 }
 
@@ -77,7 +77,7 @@ stage ("DEPLOY_ACTIONS_BE_Crud") {
 }
     
 
-stage ('Approve_and_Reject_Deployment_BE_Crud_AZ') {
+stage ('Deployment_BE_Crud_AZ') {
     build job: 'prod_BE_crud_Deploy', parameters: [[$class: 'StringParameterValue', name: 'AZ', value: "${env.RELEASE_SCOPE}"]]
 }
 
@@ -96,7 +96,7 @@ stage ("DEPLOY_ACTIONS_BE_JobSchulder") {
 }
     
 
-stage ('Approve_and_Reject_Deployment_BE_Jobschulder_AZ') {
+stage ('Deployment_BE_Jobschulder_AZ') {
     build job: 'prod_BE_jobsculders_Deploy', parameters: [[$class: 'StringParameterValue', name: 'AZ', value: "${env.RELEASE_SCOPE}"]]
 }
 
