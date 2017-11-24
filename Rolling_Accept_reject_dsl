@@ -1,0 +1,236 @@
+job('Sample')
+{
+  steps{
+      singleConditionalBuilder{
+        condition{
+            stringsMatchCondition {
+             arg1('${REQUESTED_ACTIONS}')
+            arg2('Reject')
+           ignoreCase(true)
+        
+}
+        }
+        buildStep {
+         triggerBuilder {
+configs {
+    blockableBuildTriggerConfig {
+      projects('Rollback_AzB_Instances')
+  block { 
+buildStepFailureThreshold('FAILURE')
+unstableThreshold('FAILURE')
+failureThreshold('UNSTABLE')
+}
+
+
+    }}
+         }}
+        runner {
+          fail()
+        }
+      }
+   }
+  
+  
+  
+  
+  
+  
+  steps{
+      singleConditionalBuilder{
+        condition{
+            stringsMatchCondition {
+             arg1('${REQUESTED_ACTIONS}')
+            arg2('Approve')
+           ignoreCase(true)
+        
+}
+        }
+                buildStep {
+         triggerBuilder {
+configs {
+    blockableBuildTriggerConfig {
+      projects('Join_AzA_Environment')
+  block { 
+buildStepFailureThreshold('FAILURE')
+unstableThreshold('FAILURE')
+failureThreshold('UNSTABLE')
+}
+    }
+  
+  
+  blockableBuildTriggerConfig {
+      projects('prod_FE_Deploy')
+  block { 
+buildStepFailureThreshold('FAILURE')
+unstableThreshold('FAILURE')
+failureThreshold('UNSTABLE')
+}
+   
+    configs {
+    predefinedBuildParameters {
+    properties('AZ=a')
+    }
+      
+    }
+    }
+  
+  
+  blockableBuildTriggerConfig {
+      projects('prod_BE_API_Deploy')
+  block { 
+buildStepFailureThreshold('FAILURE')
+unstableThreshold('FAILURE')
+failureThreshold('UNSTABLE')
+}
+   
+    configs {
+    predefinedBuildParameters {
+    properties('AZ=a')
+    }
+      
+    }
+    }
+  
+  
+  
+  blockableBuildTriggerConfig {
+      projects('prod_BE_connectors_Deploy')
+  block { 
+buildStepFailureThreshold('FAILURE')
+unstableThreshold('FAILURE')
+failureThreshold('UNSTABLE')
+}
+   
+    configs {
+    predefinedBuildParameters {
+    properties('AZ=a')
+    }
+      
+    }
+    }
+  
+  
+  
+  blockableBuildTriggerConfig {
+      projects('prod_BE_crud_Deploy')
+  block { 
+buildStepFailureThreshold('FAILURE')
+unstableThreshold('FAILURE')
+failureThreshold('UNSTABLE')
+}
+   
+    configs {
+    predefinedBuildParameters {
+    properties('AZ=a')
+    }
+      
+    }
+    }
+  
+  
+  
+  
+   blockableBuildTriggerConfig {
+      projects('prod_BE_jobsculders_Deploy')
+  block {
+buildStepFailureThreshold('FAILURE')
+unstableThreshold('FAILURE')
+failureThreshold('UNSTABLE')
+}
+   
+    configs {
+    predefinedBuildParameters {
+    properties('AZ=a')
+    }
+      
+    }
+    }
+   
+}      }}
+        
+        runner {
+          fail()
+        }
+  }
+}
+  
+  
+  
+  
+   steps{
+      singleConditionalBuilder{
+        condition{
+            stringsMatchCondition {
+             arg1('${ACTIONS}')
+            arg2('Approve')
+           ignoreCase(true)
+        
+}
+        }
+        buildStep {
+         triggerBuilder {
+configs {
+    blockableBuildTriggerConfig {
+      projects('Test_Whole_Environment')
+  block { 
+buildStepFailureThreshold('FAILURE')
+unstableThreshold('FAILURE')
+failureThreshold('UNSTABLE')
+}
+
+
+    }
+
+  blockableBuildTriggerConfig {
+      projects('Run_Artifact_Job')
+  block { 
+buildStepFailureThreshold('FAILURE')
+unstableThreshold('FAILURE')
+failureThreshold('UNSTABLE')
+}
+
+
+    }
+
+
+
+}
+         }}
+        runner {
+          fail()
+        }
+      }
+   }
+  
+  
+  
+   steps{
+      singleConditionalBuilder{
+        condition{
+            stringsMatchCondition {
+             arg1('${ACTIONS}')
+            arg2('Reject')
+           ignoreCase(true)
+        
+}
+        }
+        buildStep {
+         triggerBuilder {
+configs {
+    blockableBuildTriggerConfig {
+      projects('Manual_Rollback')
+  block { 
+buildStepFailureThreshold('FAILURE')
+unstableThreshold('FAILURE')
+failureThreshold('UNSTABLE')
+}
+
+
+    }}
+         }}
+        runner {
+          fail()
+        }
+      }
+   }  
+}
