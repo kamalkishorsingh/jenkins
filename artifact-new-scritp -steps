@@ -1,0 +1,17 @@
+1.    
+node {
+           stage ('Put Tag Name') {
+           script {
+                    mail (to: '<email_id>',
+                  subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) is waiting for input",
+                  body: "Please go to ${env.BUILD_URL}. This Approval for BE AZ_${env.tagAction}");
+                    env.tagAction = input message: 'Tag name? Is it working fine now.', ok: 'Deploy with tag',
+                    parameters: [string(string: "Approve\nReject", description: 'Warning:: Write down correct tag name', name: 'Tag')]
+                      }
+           } 
+               
+                stage ('Tag option') {
+                
+                build job: 'Test_Whole_Environment', parameters: [[$class: 'StringParameterValue', name: 'tag', value: "${env.tagAction}"]]
+                }
+    }
