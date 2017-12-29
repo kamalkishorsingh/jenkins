@@ -252,3 +252,119 @@ node {
     }
   }
  }
+
+
+
+
+5 -
+
+
+
+node {
+
+           //  stage ('Suspend Autoscaling Before Deployment') {
+            //     build job: 'Project_Autoscaling_Suspend_Resume_ENV_Prod', parameters: [string(name: 'Action', value: "suspend"), string(name: 'Group', value: "Project-UI-AutoScaling-Group,Backend-Application")]
+          //}
+
+
+  def jobs = env.JOBS
+  def job = jobs.split(',')
+
+  if ( env.AZACTION == "$AZACTION" ){
+    print "Hello World"
+    script {
+      env.AZName = "$AZACTION"
+    }  
+    echo "Starting deployment on AZ ${env.AZName}"  
+
+     if(env.AZACTION != 'all_az') {
+
+             
+               for(int i=0; i < job.size(); i++) {
+ 
+                    if(job[i] == "Test_Artiface_Project_UI_Prod" || job[i] == "Revert_Test_Artiface_Project_UI_Prod") {
+
+
+                stage ('Put Tag Name') {
+
+           script {
+                    mail (to: 'saurabh.vajpayee@opstree.com',
+                  subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) is waiting for input",
+                  body: "Please go to ${env.BUILD_URL}. This Approval for BE AZ_${env.tagAction}");
+                    env.tagAction = input message: 'Tag name? Is it working fine now.', ok: 'Deploy with tag',
+                    parameters: [string(string: "Approve\nReject", description: 'Warning:: Write down correct tag name', name: 'Tag')]
+                  
+               echo "$tagAction"
+
+                 stage ('Build the Job') {
+                
+                build job: job[i], parameters: [string(name: 'tagAction', value: "${env.tagAction}"), string(name: 'az', value: "${env.AZName}")]
+                }
+              
+                  stage ("Approval/Rejection For FE ") {    
+            script {
+              //mail (to: 'saurabh.vajpayee@opstree.com',
+               // subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) is waiting for input",
+               // body: "Please go to ${env.BUILD_URL}. This Approval for FE");
+              env.RequestedAction = input message: 'Do you want to confirm deployment on FE ??', ok: 'Proceed for FE',
+              parameters: [choice(choices: "Approve\nReject", description: 'You want to Approve/Reject validation of FE.', name: 'Requested_Action')]
+              
+            }  
+            echo "You have ${env.RequestedAction} to deploy on AZA "
+          }
+
+          if ( env.RequestedAction == "Approve" ){
+            print "FE deployment done"
+            sh '''#!/bin/bash
+            touch /tmp/az_${AZName}
+                  /usr/local/bin/aws s3 cp --profile saurabh /tmp/az_${AZName} s3://glacier-data-test/Project/FE/Prod/corrent/$tagAction/
+                  '''
+          }
+
+            else{
+            stage("Revert " + job[i]){
+              build job: "Revert_" + job[i], parameters: [[$class: 'StringParameterValue', name: 'az', value: "${env.AZName}"]],propagate: false
+            }
+
+          }
+
+
+             sh '''
+             #!/bin/bash
+              set +e
+              /usr/local/bin/aws s3 ls --profile saurabh s3://glacier-data-test/Project/FE/Prod/corrent/rolling-1/az_a
+                if [[ $? -ne 0 ]]; then
+                    echo "AZ_A File does not exist"
+                    /usr/local/bin/aws s3 ls --profile saurabh s3://glacier-data-test/Project/FE/Prod/corrent/rolling-1/az_b
+                    if [[ $? -ne 0 ]]; then
+                        echo "Both File Does not Exist"
+                    else 
+                        echo "AZ_B file exist"
+                    fi
+                    
+                else
+                    /usr/local/bin/aws s3 ls --profile saurabh s3://glacier-data-test/Project/FE/Prod/corrent/rolling-1/az_b
+                    if [[ $? -ne 0 ]]; then
+                        echo "AZ_B File does not Exist"
+                    else
+                        echo "Both File exist"
+                        /usr/local/bin/aws s3 cp --profile saurabh s3://s3://glacier-data-test/Project/FE/Prod/live/auto4
+                        /usr/local/bin/aws s3 cp --profile saurabh s3://s3://glacier-data-test/Project/FE/Prod/live/auto3 s3://glacier-data-test/Projrct/FE/Prod/live/auto4
+                        /usr/local/bin/aws s3 cp --profile saurabh s3://s3://glacier-data-test/Project/FE/Prod/live/auto2 s3://glacier-data-test/Projrct/FE/Prod/live/auto3
+                        /usr/local/bin/aws s3 cp --profile saurabh s3://s3://glacier-data-test/Project/FE/Prod/live/auto1 s3://glacier-data-test/Projrct/FE/Prod/live/auto2
+                        /usr/local/bin/aws s3 cp --profile saurabh s3://s3://glacier-data-test/Project/FE/Prod/live/auto s3://glacier-data-test/Projrct/FE/Prod/live/auto1
+                        /usr/local/bin/aws s3 cp --profile saurabh s3://glacier-data-test/Project/FE/Prod/corrent/${tagAction}/Project.tar.gz s3://glacier-data-test/Project/FE/Prod/live/auto
+
+                    fi
+                fi
+                  '''
+
+
+             }   
+
+           }
+        }
+      }
+    }
+  }
+ }
