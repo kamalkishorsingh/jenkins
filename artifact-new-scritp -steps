@@ -58,12 +58,6 @@ node {
 3.
 
 node {
-
-           //  stage ('Suspend Autoscaling Before Deployment') {
-            //     build job: 'BigParser_Autoscaling_Suspend_Resume_ENV_Prod', parameters: [string(name: 'Action', value: "suspend"), string(name: 'Group', value: "Bigparser-UI-AutoScaling-Group,Backend-Application")]
-          //}
-
-
   def jobs = env.JOBS
   def job = jobs.split(',')
 
@@ -82,7 +76,7 @@ node {
        stage ('Put Tag Name') {
 
            script {
-                    mail (to: 'saurabh.vajpayee@opstree.com',
+                    mail (to: '<email_id)',
                   subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) is waiting for input",
                   body: "Please go to ${env.BUILD_URL}. This Approval for BE AZ_${env.tagAction}");
                     env.tagAction = input message: 'Tag name? Is it working fine now.', ok: 'Deploy with tag',
@@ -134,6 +128,109 @@ node {
                   aws s3 cp /tmp/$AZName s3://mybuckethakk/Project/FE/Prod/Corrent/$tagAction/
                   '''
           }
+
+             sh '''#!/bin/bash
+              exists_a=$(aws s3 ls s3://mybuckethakk/Project/FE/Prod/Corrent/$tagAction/a)
+              exists_b=$(aws s3 ls s3://mybuckethakk/Project/FE/Prod/Corrent/$tagAction/b)
+               if [[ -z "$exists_a" || -z "$exists_b" ]]; then
+                  echo "all files does not exist"
+                  
+                   else
+                       echo "it exists"
+                      aws s3 cp s3://mybuckethakk/Project/FE/Prod/Corrent/$tagAction/test s3://mybuckethakk/Project/FE/Prod/Live/test
+                 fi
+                  '''
+
+             }   
+
+           }
+        }
+      }
+    }
+  }
+ }
+ 
+ 
+ 4.
+ node {
+
+  def jobs = env.JOBS
+  def job = jobs.split(',')
+
+  if ( env.AZACTION == "$AZACTION" ){
+    print "Hello World"
+    script {
+      env.AZName = "$AZACTION"
+    }  
+    echo "Starting deployment on AZ ${env.AZName}"  
+
+     if(env.AZACTION != 'all_az') {
+             
+
+
+    
+       stage ('Put Tag Name') {
+
+           script {
+                    mail (to: '<imaild_id>',
+                  subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) is waiting for input",
+                  body: "Please go to ${env.BUILD_URL}. This Approval for BE AZ_${env.tagAction}");
+                    env.tagAction = input message: 'Tag name? Is it working fine now.', ok: 'Deploy with tag',
+                    parameters: [string(string: "Approve\nReject", description: 'Warning:: Write down correct tag name', name: 'Tag')]
+                  
+               echo "$tagAction"
+        
+               for(int i=0; i < job.size(); i++) {
+ 
+                    if(job[i] == "Test_Whole_Environment") {
+
+
+                 stage ('Tag option') {
+                
+                build job: job[i], parameters: [string(name: 'tag', value: "${env.tagAction}"), string(name: 'az', value: "${env.AZName}")]
+                }
+
+
+              sh '''#!/bin/bash
+              exists=$(aws s3 ls s3://mybuckethakk/Project/FE/Prod/Corrent/$tagAction/test)
+               if [ -z "$exists" ]; then
+                  echo "it does not exist"
+                  aws s3 cp /tmp/test s3://mybuckethakk/Project/FE/Prod/Corrent/$tagAction/test
+                   else
+                       echo "it exists"
+                 fi
+                  '''
+               stage ('FE Deployment') { 
+                build job: 'Deploy_AzA', parameters: [[$class: 'StringParameterValue', name: 'az', value: "${env.AZName}"]],propagate: false
+                }
+
+                  stage ("Approval/Rejection For FE ") {    
+            script {
+              mail (to: 'saurabh.vajpayee@opstree.com',
+                subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) is waiting for input",
+                body: "Please go to ${env.BUILD_URL}. This Approval for FE");
+              env.RequestedAction = input message: 'Do you want to confirm deployment on FE ??', ok: 'Proceed for FE',
+              parameters: [choice(choices: "Approve\nReject", description: 'You want to Approve/Reject validation of FE.', name: 'Requested_Action')]
+              //input 'Ready to go? Please click again "Input requested" option and Select Always Proceed option';
+            }  
+            echo "You have ${env.RequestedAction} to deploy on AZA "
+          }
+
+          if ( env.RequestedAction == "Approve" ){
+            print "FE deployment done"
+            sh '''#!/bin/bash
+            touch /tmp/$AZName
+                  aws s3 cp /tmp/$AZName s3://mybuckethakk/Project/FE/Prod/Corrent/$tagAction/
+                  '''
+          }
+
+            else{
+            stage("Revert " + job[i]){
+              //build job: "Revert_" + job[i], parameters: [[$class: 'StringParameterValue', name: 'az', value: "${env.AZName}"]],propagate: false
+            }
+
+          }
+
 
              sh '''#!/bin/bash
               exists_a=$(aws s3 ls s3://mybuckethakk/Project/FE/Prod/Corrent/$tagAction/a)
