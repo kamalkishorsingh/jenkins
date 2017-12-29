@@ -15,3 +15,40 @@ node {
                 build job: 'Test_Whole_Environment', parameters: [[$class: 'StringParameterValue', name: 'tag', value: "${env.tagAction}"]]
                 }
     }
+
+
+
+
+
+2.
+node {
+    
+       stage ('Put Tag Name') {
+           script {
+                    mail (to: '<email_id>',
+                  subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) is waiting for input",
+                  body: "Please go to ${env.BUILD_URL}. This Approval for BE AZ_${env.tagAction}");
+                    env.tagAction = input message: 'Tag name? Is it working fine now.', ok: 'Deploy with tag',
+                    parameters: [string(string: "Approve\nReject", description: 'Warning:: Write down correct tag name', name: 'Tag')]
+                  
+               echo "$tagAction"
+        
+               
+                 stage ('Tag option') {
+                
+                build job: 'Test_Whole_Environment', parameters: [[$class: 'StringParameterValue', name: 'tag', value: "${env.tagAction}"]]
+                }
+
+
+              sh '''#!/bin/bash
+              exists=$(aws s3 ls s3://mybuckethakk/Project/FE/Prod/Corrent/$tagAction/test)
+               if [ -z "$exists" ]; then
+                  echo "it does not exist"
+                  aws s3 cp /tmp/test s3://mybuckethakk/Project/FE/Prod/Corrent/$tagAction/test
+                   else
+                       echo "it exists"
+                 fi
+                  '''
+           }
+        }
+    }
