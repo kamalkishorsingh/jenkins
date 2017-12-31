@@ -1,0 +1,49 @@
+#!/bin/bash
+S3_ACTION=$1
+PROFILE_ID=$2
+BUCKET_ID=$3
+PROJECT_ID=$4
+APP_ID=$5
+ENV_ID=$6
+RELEASE_ID=$7
+tagAction=$8
+AZName=$9
+PATH_ID=$10
+
+
+if [ ${S3_ACTION} = "UPLOAD" ];
+then
+set +e
+touch /tmp/az_$az
+/usr/local/bin/aws s3 cp --profile ${PROFILE_ID} /tmp/az_$az s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/corrent/$tagAction/
+
+/usr/local/bin/aws s3 ls --profile ${PROFILE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/corrent/$tagAction/az_a
+ if [[ $? -ne 0 ]]; then
+    echo "AZ_A File does not exist"
+   
+      /usr/local/bin/aws s3 ls --profile ${PROFILE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/corrent/$tagAction/az_b
+      if [[ $? -ne 0 ]]; then
+         echo "Both File Does not Exist"
+    else 
+        echo "AZ_B file exist"
+      fi
+                 
+    else
+     /usr/local/bin/aws s3 ls --profile ${PROFILE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/corrent/$tagAction/az_b
+      if [[ $? -ne 0 ]]; then
+        echo "AZ_B File does not Exist"
+          else
+     echo "Both File exist"
+     /usr/local/bin/aws s3 rm --profile ${PROFILE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID}4
+     /usr/local/bin/aws s3 cp --profile ${PROFILE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID}3 s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID}4
+     /usr/local/bin/aws s3 cp --profile ${PROFILE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID}2 s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID}3
+     /usr/local/bin/aws s3 cp --profile ${PROFILE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID}1 s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID}2
+     /usr/local/bin/aws s3 cp --profile ${PROFILE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID}1
+     /usr/local/bin/aws s3 cp --profile ${PROFILE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/corrent/${tagAction}/${RELEASE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID}
+
+        fi
+    fi
+elif [ "${S3_ACTION}" = REVERT ];
+then
+/usr/local/bin/aws s3 cp --profile ${PROFILE_ID} s3://${BUCKET_ID}/${PROJECT_ID}/${APP_ID}/${ENV_ID}/live/${RELEASE_ID} ${PATH_ID}
+fi
